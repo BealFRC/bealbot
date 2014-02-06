@@ -10,10 +10,10 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author Robotics Club
  */
-public class BasicTankDrive extends CommandBase {
+public class FireArm extends CommandBase {
     
-    public BasicTankDrive() {
-        requires(drivetrain);
+    public FireArm() {
+        requires(arm);
     }
 
     // Called just before this Command runs the first time
@@ -22,22 +22,22 @@ public class BasicTankDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        boolean isTriggerPressed = oi.rightStick.getRawButton(2); //Boost is controlled by trigger
-        drivetrain.setLeftSpeed(oi.rightStick.getY(), isTriggerPressed);
-        drivetrain.setRightSpeed(oi.leftStick.getY(), isTriggerPressed);
+       arm.launchArm();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+        arm.stopArm();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        arm.stopArm();
     }
 }

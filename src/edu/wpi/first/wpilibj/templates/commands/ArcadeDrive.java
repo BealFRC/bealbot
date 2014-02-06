@@ -10,9 +10,9 @@ package edu.wpi.first.wpilibj.templates.commands;
  *
  * @author Robotics Club
  */
-public class BasicArcadeDrive extends CommandBase {
+public class ArcadeDrive extends CommandBase {
     
-    public BasicArcadeDrive() {
+    public ArcadeDrive() {
         requires(drivetrain);
     }
 
@@ -22,16 +22,10 @@ public class BasicArcadeDrive extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        boolean isTriggerPressed = oi.leftStick.getTrigger(); //Boost is controlled by trigger
+        boolean isBoostButtonPressed = oi.rightStick.getRawButton(2); //Boost is controlled by trigger
         double moveValue = oi.rightStick.getY();
         double rotateValue = oi.rightStick.getX();
         boolean squaredInputs = false;
-        
-        // local variables to hold the computed PWM values for the motors
-//        if(!kArcadeStandard_Reported){
-//            UsageReporting.report(UsageReporting.kResourceType_RobotDrive, getNumMotors(), UsageReporting.kRobotDrive_ArcadeStandard);
-//            kArcadeStandard_Reported = true;
-//        }
 
         double leftMotorSpeed;
         double rightMotorSpeed;
@@ -43,12 +37,12 @@ public class BasicArcadeDrive extends CommandBase {
             // square the inputs (while preserving the sign) to increase fine control while permitting full power
             if (moveValue >= 0.0) {
                 moveValue = (moveValue * moveValue);
-            } else {
+            } else  {
                 moveValue = -(moveValue * moveValue);
             }
             if (rotateValue >= 0.0) {
                 rotateValue = (rotateValue * rotateValue);
-            } else {
+            } else if (rotateValue <= -0.0) {
                 rotateValue = -(rotateValue * rotateValue);
             }
         }
@@ -68,24 +62,28 @@ public class BasicArcadeDrive extends CommandBase {
             } else {
                 leftMotorSpeed = moveValue - rotateValue;
                 rightMotorSpeed = -Math.max(-moveValue, -rotateValue);
-            }
+            } 
         }
            
-        drivetrain.setLeftSpeed(leftMotorSpeed, isTriggerPressed);
-        drivetrain.setRightSpeed(rightMotorSpeed, isTriggerPressed);
+        drivetrain.setLeftSpeed(leftMotorSpeed, isBoostButtonPressed);
+        drivetrain.setRightSpeed(rightMotorSpeed, isBoostButtonPressed);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return true;
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+        drivetrain.setLeftSpeed(0.0);
+        drivetrain.setRightSpeed(0.0);
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+        drivetrain.setLeftSpeed(0.0);
+        drivetrain.setRightSpeed(0.0);
     }
 }

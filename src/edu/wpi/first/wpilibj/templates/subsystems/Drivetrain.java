@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.templates.RobotMap;
-import edu.wpi.first.wpilibj.templates.commands.BasicTankDrive;
+import edu.wpi.first.wpilibj.templates.commands.ArcadeDrive;
 
 /**
  *
@@ -30,8 +30,12 @@ public class Drivetrain extends Subsystem {
     boolean parkingBrake = false;
     
     public void initDefaultCommand() {
+        //Eliminate deadband
+        leftMotor.enableDeadbandElimination(true);
+        rightMotor.enableDeadbandElimination(true);
+        
         // Set the default command for a subsystem here.
-        setDefaultCommand(new BasicTankDrive());
+        setDefaultCommand(new ArcadeDrive());
     }
     
     /*
@@ -52,8 +56,23 @@ public class Drivetrain extends Subsystem {
     Sets the speed of the left motor to desiredSpeed with optional boost
     */
     public void setLeftSpeed(double desiredSpeed, boolean boost) {
+        setLeftSpeed(desiredSpeed, boost, true);
+    }
+    
+    /*
+    Sets the speed of the right motor to desiredSpeed with optional boost
+    */
+    public void setRightSpeed(double desiredSpeed, boolean boost) {
+        setRightSpeed(desiredSpeed, boost, true);
+    }
+    
+    /*
+    Sets the speed of the left motor to desiredSpeed with optional boost
+    */
+    public void setLeftSpeed(double desiredSpeed, boolean boost, boolean applyScale) {
         if (!parkingBrake) {
-            double drivingSpeed = scaleSpeed(desiredSpeed);
+            double drivingSpeed = desiredSpeed;
+            if (applyScale) drivingSpeed = scaleSpeed(desiredSpeed);
             if (boost) drivingSpeed = applyBoost(drivingSpeed);
             leftMotor.set(drivingSpeed);    
         }
@@ -63,9 +82,10 @@ public class Drivetrain extends Subsystem {
     /*
     Sets the speed of the right motor to desiredSpeed with optional boost
     */
-    public void setRightSpeed(double desiredSpeed, boolean boost) {
+    public void setRightSpeed(double desiredSpeed, boolean boost, boolean applyScale) {
         if (!parkingBrake) {
-            double drivingSpeed = scaleSpeed(desiredSpeed);
+            double drivingSpeed = desiredSpeed;
+            if (applyScale) drivingSpeed = scaleSpeed(desiredSpeed);
             if (boost) drivingSpeed = applyBoost(drivingSpeed);
             rightMotor.set(drivingSpeed);    
         }
@@ -111,16 +131,12 @@ public class Drivetrain extends Subsystem {
             return speedBeforeBoost;
         }
     }
-
-//    private double applyBoost(double speedBeforeBoost, double rawBoost) 
-//        double normalizedBoost    
-//            
-//        if (speedBeforeBoost < -0.25) {
-//            return speedBeforeBoost - this.speedBoost;
-//        } else if (speedBeforeBoost > 0.25) {
-//            return speedBeforeBoost + this.speedBoost;
-//        } else {
-//            return speedBeforeBoost;
-//        }
-//    }
+    
+    public Victor getLeftMotor() {
+        return leftMotor;
+    }
+    
+    public Victor getRightMotor() {
+        return rightMotor;
+    }
 }

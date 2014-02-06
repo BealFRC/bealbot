@@ -4,7 +4,11 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.templates.commands.BasicArcadeDrive;
+import edu.wpi.first.wpilibj.templates.commands.ArcadeDrive;
+import edu.wpi.first.wpilibj.templates.commands.CalibrateCommand;
+import edu.wpi.first.wpilibj.templates.commands.FireArm;
+import edu.wpi.first.wpilibj.templates.commands.TankDrive;
+import edu.wpi.first.wpilibj.templates.commands.SurgicalTurning;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -13,6 +17,19 @@ import edu.wpi.first.wpilibj.templates.commands.BasicArcadeDrive;
 public class OI {
     public final Joystick leftStick = new Joystick(RobotMap.leftJoystickPort);
     public final Joystick rightStick = new Joystick(RobotMap.rightJoystickPort);
+    
+    Button leftStickButton1 = new JoystickButton(leftStick, 1),
+                        leftStickButton2 = new JoystickButton(leftStick, 2),
+                        leftStickButton3 = new JoystickButton(leftStick, 3),
+                        leftStickButton4 = new JoystickButton(leftStick, 4),
+                        leftStickButton5 = new JoystickButton(leftStick, 5),
+                        leftStickButton6 = new JoystickButton(leftStick, 6),
+                        leftStickButton7 = new JoystickButton(leftStick, 7),
+                        leftStickButton8 = new JoystickButton(leftStick, 8),
+                        leftStickButton9 = new JoystickButton(leftStick, 9),
+                        leftStickButton10 = new JoystickButton(leftStick, 10),
+                        leftStickButton11 = new JoystickButton(leftStick, 11),
+                        leftStickButton12 = new JoystickButton(leftStick, 12);
     
     Button rightStickButton1 = new JoystickButton(rightStick, 1),
                         rightStickButton2 = new JoystickButton(rightStick, 2),
@@ -59,9 +76,12 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
-//        rightStickButton3.toggleWhenPressed(new BasicArcadeDrive());
-        //rightStickButton3.whileHeld(new BasicArcadeDrive());
-        rightStickButton3.toggleWhenPressed(new BasicArcadeDrive());
+        leftStickButton1.whenPressed(new FireArm());
+        leftStickButton6.whenPressed(new CalibrateCommand());
+        
+        rightStickButton3.whenPressed(new ArcadeDrive());
+        rightStickButton4.whenPressed(new TankDrive());
+        rightStickButton1.whileActive(new SurgicalTurning());
     }
     
 }

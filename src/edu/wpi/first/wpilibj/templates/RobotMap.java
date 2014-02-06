@@ -10,6 +10,7 @@ public class RobotMap {
     //Port defitions
     public static final int leftMotorPort = 1;
     public static final int rightMotorPort = 2;
+    public static final int armMotorPort = 10;
     
     public static final int leftJoystickPort = 1;
     public static final int rightJoystickPort = 2;
